@@ -2,26 +2,26 @@ sudo: required
 language: c
 dist: bionic
 os:
-  - linux
-  - osx
+- linux
+- osx
 before_install:
-  - chmod +x **/*.sh
-  - ./before_build_scripts/$TRAVIS_OS_NAME.sh
+- chmod +x **/*.sh
+- "./before_build_scripts/$TRAVIS_OS_NAME.sh"
 script:
-  - cd ..
-  - git clone https://github.com/shadowsocks/shadowsocks-libev
-  - cd shadowsocks-libev
-  - git submodule update --init --recursive
-  - ../shadowsocks-libev-builds/build_scripts/$TRAVIS_OS_NAME.sh
-  - cd build/bin
-  - for file in *; do mv "$file" "${file}-${TRAVIS_OS_NAME}-$(uname -m)"; done
+- cd ..
+- git clone https://github.com/shadowsocks/shadowsocks-libev
+- cd shadowsocks-libev
+- git submodule update --init --recursive
+- "../shadowsocks-libev-builds/build_scripts/$TRAVIS_OS_NAME.sh"
+- cd build/bin
+- for file in *; do mv "$file" "${file}-${TRAVIS_OS_NAME}-$(uname -m)"; done
 before_deploy:
-  - git config --local user.name "ehhthing"
-  - git config --local user.email "ehhthing@users.noreply.github.com"
-  - git tag $(git rev-parse --short HEAD)
+- git config --local user.name "ehhthing"
+- git config --local user.email "ehhthing@users.noreply.github.com"
+- git tag $(git rev-parse --short HEAD)
 branches:
   only:
-    - master
+  - master
 deploy:
   provider: releases
   name: $(git log -1 --pretty=%B)
@@ -30,6 +30,6 @@ deploy:
   skip_cleanup: true
   file: ss-*
   api_key:
-    secure: gcG1T6IlDC8rhp5IA2sTKX0YYCeouKqGmVgGmjjhq3fhN7r79y+CkQJC3tepuUhWhd8agmp3WyKgPAs04lIHB3HciJ5owApJlp8kYMkjdyywjuKx3d+0t6DErGC7/Dsds3JSLRwhtNH5H0gINNaNrga1xmSaRNJ6L8rig90stH1KwAi9k2nr9LoblOBywMr2bwV+SVDvtLn25citqp+KBVzFuPqGtCMPyEJ0YY1KsyGw1USfbISMm5dcqAZ3p0D/NKJVdAzTCfAjnIULWklSAHFUyznQwljPDIkmbTS1yB/8iW7kNLsDjpghQByTMZqujbq4yUOkehmSs5B2utLdfVUfY1la+FCtNv+lgv4/SEUI2/FHe+n6xQRcilGwInQxnP86MH4lilk5XZEcjyhguw0SMI+eOZoY1219Ji7gPfuajGyH+9uyQvRBRYj9qZUSb0QpMgbKAvzcwevymuaPL2xImkIIfm5GMTXmHD6rxpULUbPMYemHpkX22pANN7W39lS2sEKJ0KrPm2k7V4WeipkHBbGZBA/VvN1K7+SF+R2X+PBzmM9XQZydPM/HS/+DNFUUQ8fBqB+lqR74qhCPD3CuFp1uMgVoD8asnoSZj5bl0fsEhyCDyuVWrhCaGnA/Arpk8uvctLFCsjxeJXHl4l5Kay8SLkMmyFOJfXDKAc0=
+    secure: NnUj1FCFx1bT80txF0+t14SNQxyfee4onHGbhiUdaNBlOi8ng9cL9c2DtwGkjUokjEYJD2DYbKUIE66GMf5jcyZ8sYNpDObygFNDrbl1TWNFzy8Rir8l56DtwTvBHcgqWvy4ukJ8pllkF/IGWiPjdp098BdcWslek35vH6448Q5ATp9lq/D8/6uIzO42IlYLXORmqGGngXHRxNpXWZvgypR5ic5TnUpbCCfZfcHttpfG/HQ9SwTeuzfFLzrLpoKtEOHOc62cll0z6oedNwzk9lZBN1H3THksAfCzSWWN+Jm2uMNX2Gi3RE3Y7cQ8y6PlNvhUNutZIc3jP8Ah1GzutPf+kJKGWK4POOFP3NZerLYUI0mWBbOZO6jDvtgURWT65EWuIpYYkYqSGPo8Oo54RDV6Prli4RaTDbpHMkHtp6BCNN+ghXINVcOVDz/KNfOtu/UPj0E1jZ5zfLVUhFWvwMrvYZ6fjGJQQmwSTYTf6W6JXGVt3COU1aOl7oOcl2slundaeRuIElIfK8nbobjc6axnntk0zO/WkkqS2N5j1J2gU/tXFrGpppYd5nwzBff1n5xXpl20IEaXaOeYURrw5ARyFJQ2weTErsSvowOPtvkkj2aw6hSuYW1LZAlU+infvu0Kst+hGp6rASoFND+9FulpXb3C8KvOUqWAS1DVdtQ=
   on:
     repo: ehhthing/shadowsocks-libev-builds
