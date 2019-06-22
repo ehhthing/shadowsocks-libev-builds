@@ -1,0 +1,35 @@
+sudo: required
+language: c
+dist: bionic
+os:
+  - linux
+  - osx
+before_install:
+  - chmod +x **/*.sh
+  - ./before_build_scripts/$TRAVIS_OS_NAME.sh
+script:
+  - cd ..
+  - git clone https://github.com/shadowsocks/shadowsocks-libev
+  - cd shadowsocks-libev
+  - git submodule update --init --recursive
+  - ../shadowsocks-libev-builds/build_scripts/$TRAVIS_OS_NAME.sh
+  - cd build/bin
+  - for file in *; do mv "$file" "${file}-${TRAVIS_OS_NAME}-$(uname -m)"; done
+before_deploy:
+  - git config --local user.name "ehhthing"
+  - git config --local user.email "ehhthing@users.noreply.github.com"
+  - git tag $(git rev-parse --short HEAD)
+branches:
+  only:
+    - master
+deploy:
+  provider: releases
+  name: $(git log -1 --pretty=%B)
+  body: Built based on commit $(git rev-parse HEAD)
+  file_glob: true
+  skip_cleanup: true
+  file: ss-*
+  api_key:
+    secure: gcG1T6IlDC8rhp5IA2sTKX0YYCeouKqGmVgGmjjhq3fhN7r79y+CkQJC3tepuUhWhd8agmp3WyKgPAs04lIHB3HciJ5owApJlp8kYMkjdyywjuKx3d+0t6DErGC7/Dsds3JSLRwhtNH5H0gINNaNrga1xmSaRNJ6L8rig90stH1KwAi9k2nr9LoblOBywMr2bwV+SVDvtLn25citqp+KBVzFuPqGtCMPyEJ0YY1KsyGw1USfbISMm5dcqAZ3p0D/NKJVdAzTCfAjnIULWklSAHFUyznQwljPDIkmbTS1yB/8iW7kNLsDjpghQByTMZqujbq4yUOkehmSs5B2utLdfVUfY1la+FCtNv+lgv4/SEUI2/FHe+n6xQRcilGwInQxnP86MH4lilk5XZEcjyhguw0SMI+eOZoY1219Ji7gPfuajGyH+9uyQvRBRYj9qZUSb0QpMgbKAvzcwevymuaPL2xImkIIfm5GMTXmHD6rxpULUbPMYemHpkX22pANN7W39lS2sEKJ0KrPm2k7V4WeipkHBbGZBA/VvN1K7+SF+R2X+PBzmM9XQZydPM/HS/+DNFUUQ8fBqB+lqR74qhCPD3CuFp1uMgVoD8asnoSZj5bl0fsEhyCDyuVWrhCaGnA/Arpk8uvctLFCsjxeJXHl4l5Kay8SLkMmyFOJfXDKAc0=
+  on:
+    repo: ehhthing/shadowsocks-libev-builds
