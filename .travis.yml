@@ -11,7 +11,7 @@ script:
 - cd ..
 - git clone https://github.com/shadowsocks/shadowsocks-libev
 - cd shadowsocks-libev
-- RELEASE_NAME = $(git log -1 --pretty=%B | sed -E "s/(.{${1-40}}).*$/\1.../")
+- RELEASE_NAME = $(git log -1 --pretty=%B | sed -E "s/(.{${1-40}}).*$/\1.../" | tr -d '\n')
 - git submodule update --init --recursive
 - "../shadowsocks-libev-builds/build_scripts/$TRAVIS_OS_NAME.sh"
 - cd build/bin
@@ -26,7 +26,7 @@ branches:
 deploy:
   provider: releases
   name: $RELEASE_NAME
-  body: Built based on commit $(git rev-parse HEAD) \($(git log -1 --pretty=%B)\)
+  body: Built based on commit $(git rev-parse HEAD)
   file_glob: true
   skip_cleanup: true
   file: ss-*
