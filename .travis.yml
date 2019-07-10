@@ -24,8 +24,8 @@ branches:
   - master
 deploy:
   provider: releases
-  name: $(git log -1 --pretty=%B | awk -v len=40 '{ if (length($0) > len) print substr($0, 1, len-3) '...'; else print; }')
-  body: Built based on commit $(git rev-parse HEAD)
+  name: $(git log -1 --pretty=%B | sed -E "s/(.{${1-40}}).*$/\1.../")
+  body: Built based on commit $(git rev-parse HEAD) \($(git log -1 --pretty=%B)\)
   file_glob: true
   skip_cleanup: true
   file: ss-*
