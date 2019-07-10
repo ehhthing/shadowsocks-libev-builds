@@ -24,7 +24,7 @@ branches:
   - master
 deploy:
   provider: releases
-  name: $(git log -1 --pretty=%B | awk -v len=40 '{ if (length($0) > len) print substr($0, 1, len-3) "..."; else print; }')
+  name: $(git log -1 --pretty=%B | awk -v len=40 '{ if (length($0) > len) print substr($0, 1, len-3) '...'; else print; }')
   body: Built based on commit $(git rev-parse HEAD)
   file_glob: true
   skip_cleanup: true
